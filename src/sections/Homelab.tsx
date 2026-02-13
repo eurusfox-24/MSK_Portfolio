@@ -90,7 +90,7 @@ export default function Homelab() {
               {/* Background Image */}
               <div className="absolute inset-0">
                 <img
-                  src="images/Tpot.jpg"
+                  src="images/Tpot.jpeg"
                   alt="T-Pot Dashboard"
                   className={`w-full h-full object-cover transition-all duration-700 ${
                     isExpanded ? 'scale-105 opacity-100' : 'scale-100 opacity-60'

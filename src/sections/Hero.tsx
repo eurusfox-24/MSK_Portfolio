@@ -72,11 +72,11 @@ export default function Hero() {
 
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+        {/* Changed to 12-column grid */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
-          {/* Left Column - Identity */}
-          <div className={`space-y-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            {/* Main Heading */}
+          {/* Left Column - Identity (Now taking 7/12 of the space) */}
+          <div className={`lg:col-span-7 space-y-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="space-y-2">
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight">
                 <span className="text-cyber-green">{typedText}</span>
@@ -87,8 +87,7 @@ export default function Hero() {
               </p>
             </div>
 
-            {/* Description */}
-            <div className="space-y-4 text-white/50 leading-relaxed max-w-xl text-sm sm:text-base">
+            <div className="space-y-4 text-white/50 leading-relaxed max-w-2xl text-sm sm:text-base">
               <p>
                 This website is a dedicated space to showcase my professional certifications, 
                 hands-on technical projects, and homelab research. It documents my active 
@@ -102,7 +101,6 @@ export default function Hero() {
               </p>
             </div>
 
-            {/* CTA Buttons */}
             <div className="flex flex-wrap gap-3 pt-2">
               <button
                 onClick={scrollToProjects}
@@ -122,20 +120,16 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Column - Badge Card */}
+          {/* Right Column - Badge Card (Now taking 5/12 of the space) */}
           <div 
-            className={`relative transition-all duration-1000 delay-300 ${
+            className={`lg:col-span-5 relative transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
             }`}
           >
-            {/* Holographic Card */}
-            <div className="relative group">
-              {/* Card Glow */}
+            <div className="relative group max-w-md ml-auto"> {/* Added ml-auto and max-w to keep it neat */}
               <div className="absolute -inset-1 bg-gradient-to-r from-cyber-green/20 via-cyber-green/40 to-cyber-green/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              {/* Card Content */}
-              <div className="relative glass rounded-2xl p-4 sm:p-6 border border-white/10 hover:border-cyber-green/30 transition-all duration-500">
-                {/* Card Header */}
+              <div className="relative glass rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-cyber-green/30 transition-all duration-500">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
@@ -145,25 +139,20 @@ export default function Hero() {
                   <span className="font-mono text-xs text-white/40">tryhackme.com</span>
                 </div>
 
-                {/* Badge Container - Fixed to fit properly */}
-                <div className="relative overflow-hidden rounded-xl bg-cyber-black/50">
-                  {/* TryHackMe Badge */}
-                  <div className="w-full flex justify-center py-4">
-                    <iframe
-                      src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=884096"
-                      style={{
-                        border: 'none',
-                        width: '100%',
-                        maxWidth: '350px',
-                        height: '120px',
-                      }}
-                      loading="lazy"
-                      title="TryHackMe Badge"
-                    />
-                  </div>
+                <div className="relative overflow-hidden rounded-xl bg-cyber-black/50 py-6 px-2 flex items-center justify-center w-full">
+                  <iframe
+                    src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=884096"
+                    style={{
+                      border: 'none',
+                      width: '329px',
+                      height: '88px',
+                    }}
+                    scrolling="no"
+                    loading="lazy"
+                    title="TryHackMe Badge"
+                  />
                 </div>
 
-                {/* Card Footer */}
                 <div className="mt-4 flex items-center justify-between">
                   <span className="font-mono text-xs text-white/50">Verified Profile</span>
                   <span className="font-mono text-xs text-cyber-green/60">ID: 884096</span>

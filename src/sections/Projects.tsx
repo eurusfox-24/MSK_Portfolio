@@ -90,18 +90,7 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* View All Link */}
-        <div className="mt-10 text-center">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 border border-white/20 text-white/60 font-mono text-sm rounded-lg hover:border-cyber-green/50 hover:text-cyber-green transition-all duration-300"
-          >
-            <Github className="w-4 h-4" />
-            View All on GitHub
-          </a>
-        </div>
+
       </div>
     </section>
   );

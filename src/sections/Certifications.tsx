@@ -5,8 +5,8 @@ const certifications = [
     id: 1,
     name: 'Fortinet NSE3',
     issuer: 'Fortinet',
-    image: 'certs/Fortinet_NSE3.png',
-    date: '2024',
+    image: 'certs/Fortinet_NSE3.jpeg',
+    date: '2026',
     category: 'Network Security',
     description: 'Network Security Expert certification demonstrating expertise in Fortinet security solutions.',
   },
@@ -14,8 +14,8 @@ const certifications = [
     id: 2,
     name: 'AWS Cloud Practitioner Essentials',
     issuer: 'Amazon Web Services',
-    image: 'certs/aws_cert.png',
-    date: '2024',
+    image: 'certs/aws_cert.jpeg',
+    date: '2025',
     category: 'Cloud Computing',
     description: 'Foundational cloud computing knowledge and AWS services understanding.',
   },
@@ -23,8 +23,8 @@ const certifications = [
     id: 3,
     name: 'Cisco Introduction to Cybersecurity',
     issuer: 'Cisco',
-    image: 'certs/Cisco_CysaIntro.png',
-    date: '2024',
+    image: 'certs/Cisco_CysaIntro.jpeg',
+    date: '2025',
     category: 'Cybersecurity',
     description: 'Comprehensive introduction to cybersecurity concepts and best practices.',
   },
@@ -32,7 +32,7 @@ const certifications = [
     id: 4,
     name: 'Junction Hackathon 2025',
     issuer: 'Junction',
-    image: 'certs/junctionHackathonCertificate.png',
+    image: 'certs/junctionHackathonCertificate.jpeg',
     date: '2025',
     category: 'Hackathon',
     description: 'Participation in one of Europe\'s largest hackathon events.',
@@ -42,7 +42,7 @@ const certifications = [
     name: 'Google Prompting Essentials',
     issuer: 'Google',
     image: 'certs/googleprompting.jpeg',
-    date: '2024',
+    date: '2026',
     category: 'AI/ML',
     description: 'Mastering effective prompt engineering for large language models.',
   },
@@ -51,6 +51,7 @@ const certifications = [
 export default function Certifications() {
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [selectedCert, setSelectedCert] = useState<typeof certifications[0] | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -71,6 +72,15 @@ export default function Certifications() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (selectedCert) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedCert]);
 
   return (
     <section
@@ -124,20 +134,32 @@ export default function Certifications() {
               {/* Card Content */}
               <div className="relative h-full bg-cyber-dark rounded-xl border border-white/10 overflow-hidden hover:border-cyber-green/30 transition-all duration-500">
                 {/* Image Container */}
-                <div className="relative h-36 sm:h-40 overflow-hidden bg-gradient-to-br from-cyber-black to-cyber-dark">
-                  <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
+                <div 
+                  className="relative h-56 sm:h-64 overflow-hidden bg-gradient-to-br from-cyber-black to-cyber-dark cursor-pointer group"
+                  onClick={() => setSelectedCert(cert)}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 pt-12 sm:pt-14">
                     <img
                       src={cert.image}
                       alt={cert.name}
                       className={`max-w-full max-h-full object-contain transition-all duration-500 ${
-                        hoveredCard === cert.id ? 'scale-105' : 'scale-100'
+                        hoveredCard === cert.id ? 'scale-110' : 'scale-100'
                       }`}
                     />
                   </div>
                   {/* Overlay */}
                   <div className={`absolute inset-0 bg-gradient-to-t from-cyber-dark via-transparent to-transparent transition-opacity duration-300 ${
-                    hoveredCard === cert.id ? 'opacity-50' : 'opacity-70'
+                    hoveredCard === cert.id ? 'opacity-40' : 'opacity-60'
                   }`} />
+                  
+                  {/* Click to enlarge hint */}
+                  <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+                    hoveredCard === cert.id ? 'opacity-100' : 'opacity-0'
+                  }`}>
+                    <div className="text-center pointer-events-none">
+                      <div className="text-white/80 text-xs font-mono">Click to enlarge</div>
+                    </div>
+                  </div>
                   
                   {/* Category Badge */}
                   <div className="absolute top-3 left-3">
@@ -187,12 +209,49 @@ export default function Certifications() {
               <p className="font-mono text-[10px] sm:text-xs text-white/40">Categories</p>
             </div>
             <div>
-              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">2024-25</p>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">2025-26</p>
               <p className="font-mono text-[10px] sm:text-xs text-white/40">Period</p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal for Enlarged Image */}
+      {selectedCert && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setSelectedCert(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full max-h-[90vh] flex flex-col bg-cyber-dark rounded-xl border border-cyber-green/30 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedCert(null)}
+              className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-cyber-dark/80 hover:bg-cyber-green/20 border border-white/20 rounded-lg transition-colors duration-200"
+            >
+              <span className="text-white text-lg">×</span>
+            </button>
+
+            {/* Image */}
+            <div className="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-auto bg-gradient-to-br from-cyber-black to-cyber-dark">
+              <img
+                src={selectedCert.image}
+                alt={selectedCert.name}
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+
+            {/* Info */}
+            <div className="p-4 sm:p-6 border-t border-white/10">
+              <h3 className="text-lg sm:text-xl font-bold text-cyber-green mb-2">{selectedCert.name}</h3>
+              <p className="text-sm text-white/70 mb-2">{selectedCert.issuer} • {selectedCert.date}</p>
+              <p className="text-sm text-white/60">{selectedCert.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

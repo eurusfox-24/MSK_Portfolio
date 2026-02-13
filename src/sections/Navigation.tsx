@@ -84,7 +84,7 @@ export default function Navigation() {
 
           {/* CV Download */}
           <a
-            href="/cv.pdf"
+            href="./cv/Min_Set_Ko_CV.pdf"
             download="Min_Set_Ko_CV.pdf"
             className="flex items-center gap-2 px-3 py-2 ml-1 bg-cyber-green/10 hover:bg-cyber-green/20 text-cyber-green rounded-full transition-all duration-300 border border-cyber-green/30 hover:border-cyber-green/50"
           >
@@ -119,7 +119,7 @@ export default function Navigation() {
             </button>
           ))}
           <a
-            href="/cv.pdf"
+            href="./cv/Min_Set_Ko_CV.pdf"
             download="Min_Set_Ko_CV.pdf"
             className="mt-6 flex items-center gap-2 px-5 py-2.5 bg-cyber-green/10 text-cyber-green rounded-full border border-cyber-green/30"
           >
@@ -149,7 +149,7 @@ export default function Navigation() {
             ))}
           </div>
           <a
-            href="/cv.pdf"
+            href="./cv/Min_Set_Ko_CV.pdf"
             download="Min_Set_Ko_CV.pdf"
             className="flex items-center gap-1.5 text-xs font-mono text-cyber-green/60 hover:text-cyber-green transition-colors"
           >

@@ -1,9 +1,9 @@
 import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
 
 const socialLinks = [
-  { name: 'GitHub', icon: Github, href: 'https://github.com' },
-  { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com' },
-  { name: 'Email', icon: Mail, href: 'mailto:contact@example.com' },
+  { name: 'GitHub', icon: Github, href: 'https://github.com/eurusfox-24' },
+  { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/min-set-ko-4342121b6' },
+  { name: 'Email', icon: Mail, href: 'mailto:minnsetko@gmail.com' },
 ];
 
 const quickLinks = [
@@ -44,8 +44,8 @@ export default function Footer() {
             </div>
             
             <p className="text-white/50 text-sm leading-relaxed max-w-sm">
-              Passionate about cybersecurity, IoT, and continuous learning. 
-              Building secure systems and exploring technology.
+              From Homelab to Enterprise: Securing the future of Cloud, AI, and Network infrastructure. 
+              
             </p>
 
             {/* Social Links */}

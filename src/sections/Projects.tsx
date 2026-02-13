@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 
 const projects = [
   {
@@ -30,6 +30,7 @@ const projects = [
 
 export default function Projects() {
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -51,17 +52,25 @@ export default function Projects() {
     return () => observer.disconnect();
   }, []);
 
+  // Lock scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedProject]);
+
   return (
     <section
       id="projects"
       ref={sectionRef}
       className="relative py-16 lg:py-24"
     >
-      {/* Decorative Line */}
       <div className="absolute top-0 left-0 right-0 section-divider" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
         <div className="mb-10 lg:mb-14">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-8 h-px bg-cyber-green/50" />
@@ -78,7 +87,6 @@ export default function Projects() {
           </p>
         </div>
 
-        {/* Projects Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {projects.map((project, index) => (
             <ProjectCard
@@ -86,25 +94,65 @@ export default function Projects() {
               project={project}
               index={index}
               isVisible={visibleCards.includes(index)}
+              onExpand={() => setSelectedProject(project)}
             />
           ))}
         </div>
-
-
       </div>
+
+      {/* Modal for Enlarged Project */}
+      {selectedProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full max-h-[90vh] flex flex-col bg-cyber-dark rounded-xl border border-cyber-green/30 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-cyber-dark/80 hover:bg-cyber-green/20 border border-white/20 rounded-lg transition-colors duration-200"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+
+            <div className="flex-1 flex items-center justify-center p-4 sm:p-8 overflow-auto bg-gradient-to-br from-cyber-black to-cyber-dark">
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className="max-w-full max-h-full object-contain rounded-lg"
+              />
+            </div>
+
+            <div className="p-4 sm:p-6 border-t border-white/10 bg-cyber-dark">
+              <h3 className="text-lg sm:text-xl font-bold text-cyber-green mb-2">{selectedProject.title}</h3>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {selectedProject.tags.map(tag => (
+                  <span key={tag} className="px-2 py-0.5 text-[10px] font-mono text-white/40 bg-white/5 rounded border border-white/10">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm text-white/60 leading-relaxed">{selectedProject.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
 
-// Project Card Component
 function ProjectCard({
   project,
   index,
   isVisible,
+  onExpand,
 }: {
   project: typeof projects[0];
   index: number;
   isVisible: boolean;
+  onExpand: () => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -112,28 +160,22 @@ function ProjectCard({
     <div
       data-index={index}
       className={`project-card group relative transition-all duration-700 ${
-        isVisible
-          ? 'opacity-100 translate-y-0'
-          : 'opacity-0 translate-y-12'
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
       style={{ transitionDelay: `${index * 0.1}s` }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onExpand}
     >
-      {/* Card Glow */}
       <div 
         className={`absolute -inset-0.5 bg-gradient-to-r ${project.color} rounded-xl blur-lg transition-opacity duration-500 ${
           isHovered ? 'opacity-50' : 'opacity-0'
         }`}
       />
 
-      {/* Card Content */}
-      <div className="relative h-full bg-cyber-dark rounded-xl border border-white/10 overflow-hidden hover:border-cyber-green/30 transition-all duration-500">
-        {/* Image Container */}
+      <div className="relative h-full bg-cyber-dark rounded-xl border border-white/10 overflow-hidden hover:border-cyber-green/30 transition-all duration-500 cursor-pointer">
         <div className="relative h-40 sm:h-44 overflow-hidden">
-          <div 
-            className={`absolute inset-0 bg-gradient-to-r ${project.color} opacity-40`}
-          />
+          <div className={`absolute inset-0 bg-gradient-to-r ${project.color} opacity-40`} />
           <img
             src={project.image}
             alt={project.title}
@@ -141,22 +183,28 @@ function ProjectCard({
               isHovered ? 'scale-105' : 'scale-100'
             }`}
           />
-          {/* Overlay */}
           <div className={`absolute inset-0 bg-cyber-black/50 transition-opacity duration-300 ${
             isHovered ? 'opacity-30' : 'opacity-50'
           }`} />
 
-          {/* Quick Action */}
+          {/* Click to enlarge hint */}
+          <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}>
+            <span className="text-white/80 text-xs font-mono bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm border border-white/10">
+              Click to view
+            </span>
+          </div>
+
           <div className={`absolute top-3 right-3 transition-all duration-300 ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
           }`}>
-            <button className="w-7 h-7 bg-cyber-black/80 backdrop-blur-sm rounded-md flex items-center justify-center border border-white/10 hover:border-cyber-green/50 transition-all duration-300">
+            <div className="w-7 h-7 bg-cyber-black/80 backdrop-blur-sm rounded-md flex items-center justify-center border border-white/10 hover:border-cyber-green/50">
               <ExternalLink className="w-3.5 h-3.5 text-white/70" />
-            </button>
+            </div>
           </div>
         </div>
 
-        {/* Content */}
         <div className="p-4 sm:p-5 space-y-3">
           <h3 className="font-heading text-base sm:text-lg font-semibold text-white group-hover:text-cyber-green transition-colors duration-300 line-clamp-2">
             {project.title}
@@ -165,7 +213,6 @@ function ProjectCard({
             {project.description}
           </p>
 
-          {/* Tags */}
           <div className="flex flex-wrap gap-1.5 pt-1">
             {project.tags.map((tag) => (
               <span
@@ -178,7 +225,6 @@ function ProjectCard({
           </div>
         </div>
 
-        {/* Bottom Accent */}
         <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-green/50 to-transparent transition-opacity duration-300 ${
           isHovered ? 'opacity-100' : 'opacity-0'
         }`} />

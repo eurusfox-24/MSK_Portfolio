@@ -45,7 +45,6 @@ export default function Footer() {
             
             <p className="text-white/50 text-sm leading-relaxed max-w-sm">
               From Homelab to Enterprise: Securing the future of Cloud, AI, and Network infrastructure. 
-              
             </p>
 
             {/* Social Links */}
@@ -54,7 +53,7 @@ export default function Footer() {
                 <a
                   key={link.name}
                   href={link.href}
-                  target="_blank"
+                  target={link.name === 'Email' ? '_self' : '_blank'}
                   rel="noopener noreferrer"
                   className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all duration-300 group"
                   aria-label={link.name}
@@ -96,10 +95,10 @@ export default function Footer() {
             <h4 className="font-mono text-sm text-white/40 tracking-wider">CONTACT</h4>
             <div className="space-y-2">
               <p className="text-white/50 text-sm">
-                Open to opportunities in cybersecurity and IoT.
+                Open to opportunities in Cybersecurity and Enterprise Networking roles.
               </p>
               <a
-                href="mailto:contact@example.com"
+                href="mailto:minnsetko@gmail.com"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-cyber-green/10 border border-cyber-green/30 rounded-lg text-cyber-green font-mono text-sm hover:bg-cyber-green/20 transition-all duration-300"
               >
                 <Mail className="w-4 h-4" />

@@ -1,0 +1,198 @@
+import { useEffect, useRef, useState } from 'react';
+
+const certifications = [
+  {
+    id: 1,
+    name: 'Fortinet NSE3',
+    issuer: 'Fortinet',
+    image: 'certs/Fortinet_NSE3.png',
+    date: '2024',
+    category: 'Network Security',
+    description: 'Network Security Expert certification demonstrating expertise in Fortinet security solutions.',
+  },
+  {
+    id: 2,
+    name: 'AWS Cloud Practitioner Essentials',
+    issuer: 'Amazon Web Services',
+    image: 'certs/aws_cert.png',
+    date: '2024',
+    category: 'Cloud Computing',
+    description: 'Foundational cloud computing knowledge and AWS services understanding.',
+  },
+  {
+    id: 3,
+    name: 'Cisco Introduction to Cybersecurity',
+    issuer: 'Cisco',
+    image: 'certs/Cisco_CysaIntro.png',
+    date: '2024',
+    category: 'Cybersecurity',
+    description: 'Comprehensive introduction to cybersecurity concepts and best practices.',
+  },
+  {
+    id: 4,
+    name: 'Junction Hackathon 2025',
+    issuer: 'Junction',
+    image: 'certs/junctionHackathonCertificate.png',
+    date: '2025',
+    category: 'Hackathon',
+    description: 'Participation in one of Europe\'s largest hackathon events.',
+  },
+  {
+    id: 5,
+    name: 'Google Prompting Essentials',
+    issuer: 'Google',
+    image: 'certs/googleprompting.jpeg',
+    date: '2024',
+    category: 'AI/ML',
+    description: 'Mastering effective prompt engineering for large language models.',
+  },
+];
+
+export default function Certifications() {
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            setVisibleCards((prev) => [...new Set([...prev, index])]);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '-50px' }
+    );
+
+    const cards = sectionRef.current?.querySelectorAll('.cert-card');
+    cards?.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      id="certifications"
+      ref={sectionRef}
+      className="relative py-16 lg:py-24"
+    >
+      {/* Section Divider */}
+      <div className="absolute top-0 left-0 right-0 section-divider" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Section Header */}
+        <div className="mb-10 lg:mb-14">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-px bg-cyber-green/50" />
+            <span className="font-mono text-xs text-cyber-green/60 tracking-widest">
+              CREDENTIALS
+            </span>
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+            Certifications
+          </h2>
+          <p className="mt-3 text-white/50 max-w-2xl text-sm sm:text-base">
+            Professional certifications and achievements demonstrating continuous learning 
+            and expertise in cybersecurity, cloud computing, and emerging technologies.
+          </p>
+        </div>
+
+        {/* Certifications Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {certifications.map((cert, index) => (
+            <div
+              key={cert.id}
+              data-index={index}
+              className={`cert-card group relative transition-all duration-700 ${
+                visibleCards.includes(index)
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-12'
+              }`}
+              style={{ transitionDelay: `${index * 0.1}s` }}
+              onMouseEnter={() => setHoveredCard(cert.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              {/* Card Glow */}
+              <div 
+                className={`absolute -inset-0.5 bg-gradient-to-r from-cyber-green/20 to-cyber-green-dim/20 rounded-xl blur-lg transition-opacity duration-500 ${
+                  hoveredCard === cert.id ? 'opacity-50' : 'opacity-0'
+                }`}
+              />
+
+              {/* Card Content */}
+              <div className="relative h-full bg-cyber-dark rounded-xl border border-white/10 overflow-hidden hover:border-cyber-green/30 transition-all duration-500">
+                {/* Image Container */}
+                <div className="relative h-36 sm:h-40 overflow-hidden bg-gradient-to-br from-cyber-black to-cyber-dark">
+                  <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
+                    <img
+                      src={cert.image}
+                      alt={cert.name}
+                      className={`max-w-full max-h-full object-contain transition-all duration-500 ${
+                        hoveredCard === cert.id ? 'scale-105' : 'scale-100'
+                      }`}
+                    />
+                  </div>
+                  {/* Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-t from-cyber-dark via-transparent to-transparent transition-opacity duration-300 ${
+                    hoveredCard === cert.id ? 'opacity-50' : 'opacity-70'
+                  }`} />
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2 py-0.5 text-[10px] sm:text-xs font-mono text-cyber-green bg-cyber-green/10 border border-cyber-green/30 rounded-full">
+                      {cert.category}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 space-y-2">
+                  <h3 className="font-heading text-sm sm:text-base font-semibold text-white group-hover:text-cyber-green transition-colors duration-300 line-clamp-2">
+                    {cert.name}
+                  </h3>
+                  
+                  <div className="flex items-center gap-3 text-xs text-white/40">
+                    <span>{cert.issuer}</span>
+                    <span>•</span>
+                    <span>{cert.date}</span>
+                  </div>
+
+                  <p className="text-xs text-white/50 leading-relaxed line-clamp-2">
+                    {cert.description}
+                  </p>
+                </div>
+
+                {/* Bottom Accent */}
+                <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-green/50 to-transparent transition-opacity duration-300 ${
+                  hoveredCard === cert.id ? 'opacity-100' : 'opacity-0'
+                }`} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Summary Stats */}
+        <div className={`mt-10 sm:mt-12 p-5 sm:p-6 bg-cyber-dark/50 rounded-xl border border-white/10 transition-all duration-1000 delay-500 ${
+          visibleCards.length === certifications.length ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">{certifications.length}</p>
+              <p className="font-mono text-[10px] sm:text-xs text-white/40">Total Certs</p>
+            </div>
+            <div>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">4</p>
+              <p className="font-mono text-[10px] sm:text-xs text-white/40">Categories</p>
+            </div>
+            <div>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">2024-25</p>
+              <p className="font-mono text-[10px] sm:text-xs text-white/40">Period</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

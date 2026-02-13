@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# 🚀 MSK Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance developer portfolio built with a focus on clean UI, smooth animations, and type-safe architecture.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
+**Access the live site here:** 👉 **[https://eurusfox-24.github.io/MSK_Portfolio/](https://eurusfox-24.github.io/MSK_Portfolio/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This portfolio leverages a "Gold Standard" frontend stack for maximum speed and reliability:
 
-## Expanding the ESLint configuration
+* **Framework:** [React](https://react.dev/) (Functional Components & Hooks)
+* **Language:** [TypeScript](https://www.typescriptlang.org/) for static typing
+* **Build Tool:** [Vite](https://vitejs.dev/) for lightning-fast development and optimized bundling
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/) for utility-first responsive design
+* **Animations:** [Framer Motion](https://www.framer.com/motion/) for fluid transitions
+* **Deployment:** [GitHub Pages](https://pages.github.com/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Key Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* **Responsive Design:** Fully optimized for mobile, tablet, and desktop views.
+* **Type-Safe:** Developed with strict TypeScript rules to ensure code quality.
+* **Interactive UI:** Smooth scroll-linked animations and custom-designed project cards.
+* **Optimized Performance:** Fast load times and asset optimization via Vite.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🏗️ Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To run this project locally, follow these steps:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/eurusfox-24/MSK_Portfolio.git](https://github.com/eurusfox-24/MSK_Portfolio.git)
+    ```
+
+2.  **Navigate into the directory:**
+    ```bash
+    cd MSK_Portfolio
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+4.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+5.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+---
+
+## 📬 Contact & Socials
+
+Feel free to reach out for collaborations or just to say hi!
+
+* **Live Portfolio:** [eurusfox-24.github.io/MSK_Portfolio/](https://eurusfox-24.github.io/MSK_Portfolio/)
+* **GitHub:** [@eurusfox-24](https://github.com/eurusfox-24)
+
+---
+© 2026 MSK Portfolio

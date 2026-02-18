@@ -8,7 +8,7 @@ const certifications = [
     image: 'certs/Fortinet_NSE3.jpeg',
     date: '2026',
     category: 'Network Security',
-    description: 'Network Security Expert certification demonstrating expertise in Fortinet security solutions.',
+    description: 'Network Security Associate certification demonstrating expertise in Fortinet Firewall administration.',
   },
   {
     id: 2,

@@ -1,9 +1,21 @@
 import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
 
 const socialLinks = [
-  { name: 'GitHub', icon: Github, href: 'https://github.com/eurusfox-24' },
-  { name: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/min-set-ko-4342121b6' },
-  { name: 'Email', icon: Mail, href: 'mailto:minnsetko@gmail.com' },
+  { 
+    name: 'GitHub', 
+    icon: Github, 
+    href: 'https://github.com/eurusfox-24' 
+  },
+  { 
+    name: 'LinkedIn', 
+    icon: Linkedin, 
+    href: 'https://www.linkedin.com/in/min-set-ko-4342121b6' 
+  },
+  { 
+    name: 'Email', 
+    icon: Mail, 
+    href: 'mailto:minnsetko@gmail.com' 
+  },
 ];
 
 const quickLinks = [
@@ -36,6 +48,7 @@ export default function Footer() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12 mb-12">
+          
           {/* Brand Column */}
           <div className="space-y-4">
             <div>
@@ -53,6 +66,7 @@ export default function Footer() {
                 <a
                   key={link.name}
                   href={link.href}
+                  // Improved logic to ensure external links open in new tab
                   target={link.name === 'Email' ? '_self' : '_blank'}
                   rel="noopener noreferrer"
                   className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:border-cyber-green/50 hover:bg-cyber-green/10 transition-all duration-300 group"
@@ -111,7 +125,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-mono text-xs text-white/30">
-            © 2025 Min Set Ko. All rights reserved.
+            © {new Date().getFullYear()} Min Set Ko. All rights reserved.
           </p>
           <button
             onClick={scrollToTop}

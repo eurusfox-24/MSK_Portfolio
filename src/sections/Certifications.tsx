@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const certifications = [
+const fallbackCertifications = [
   {
     id: 1,
     name: 'Fortinet NSE3',
@@ -49,10 +49,43 @@ const certifications = [
 ];
 
 export default function Certifications() {
+  const [certifications, setCertifications] = useState(fallbackCertifications);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [selectedCert, setSelectedCert] = useState<typeof certifications[0] | null>(null);
+  const [selectedCert, setSelectedCert] = useState<typeof fallbackCertifications[0] | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:1337/api/certifications?populate=*')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.data && data.data.length > 0) {
+          const cmsCerts = data.data.map((item: any) => {
+            const attrs = item.attributes || item; // Handle Strapi v4 vs v5 response structure
+            let imageUrl = attrs.image;
+            if (attrs.image?.data?.attributes?.url) { // v4
+              imageUrl = `http://localhost:1337${attrs.image.data.attributes.url}`;
+            } else if (attrs.image?.url) { // v5
+              imageUrl = `http://localhost:1337${attrs.image.url}`;
+            }
+            
+            return {
+              id: item.id || attrs.documentId,
+              name: attrs.name,
+              issuer: attrs.issuer,
+              image: imageUrl,
+              date: attrs.date,
+              category: attrs.category,
+              description: attrs.description,
+            };
+          });
+          setCertifications(cmsCerts);
+        }
+      })
+      .catch((err) => {
+        console.log('Using fallback certification data (Strapi CMS not reachable)', err);
+      });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,7 +104,7 @@ export default function Certifications() {
     cards?.forEach((card) => observer.observe(card));
 
     return () => observer.disconnect();
-  }, []);
+  }, [certifications]);
 
   useEffect(() => {
     if (selectedCert) {
@@ -205,11 +238,21 @@ export default function Certifications() {
               <p className="font-mono text-[10px] sm:text-xs text-white/40">Total Certs</p>
             </div>
             <div>
-              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">4</p>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">
+                {new Set(certifications.map(c => c.category)).size}
+              </p>
               <p className="font-mono text-[10px] sm:text-xs text-white/40">Categories</p>
             </div>
             <div>
-              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">2025-26</p>
+              <p className="font-heading text-2xl sm:text-3xl font-bold text-cyber-green mb-1">
+                {(() => {
+                  const years = certifications.map(c => parseInt(c.date)).filter(y => !isNaN(y));
+                  if (years.length === 0) return 'N/A';
+                  const min = Math.min(...years);
+                  const max = Math.max(...years);
+                  return min === max ? `${min}` : `${min}-${max.toString().slice(-2)}`;
+                })()}
+              </p>
               <p className="font-mono text-[10px] sm:text-xs text-white/40">Period</p>
             </div>
           </div>

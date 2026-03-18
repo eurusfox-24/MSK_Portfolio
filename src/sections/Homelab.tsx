@@ -1,16 +1,60 @@
 import { useEffect, useRef, useState } from 'react';
 
-const homelabFeatures = [
+const fallbackFeatures = [
   { title: 'Real-time Monitoring', description: 'Live attack surface visualization' },
   { title: 'Global Honeypot', description: 'Multi-node deployment worldwide' },
   { title: 'Security Analysis', description: 'Deep packet inspection' },
   { title: 'Log Management', description: 'Centralized Elasticsearch logging' },
 ];
 
+const fallbackStats = [
+  { label: 'Containers', value: '20+' },
+  { label: 'Attack Types', value: '50+' },
+  { label: 'Uptime', value: '99.9%' },
+  { label: 'Logs/Day', value: '10K+' },
+];
+
 export default function Homelab() {
+  const [homelabData, setHomelabData] = useState({
+    title: 'Live Attack Surface Monitoring with T-Pot',
+    description: 'Deployed a containerized T-Pot honeypot environment to monitor real-world cyberattacks, utilizing the Elastic Stack for log analysis while mastering network security via firewall configuration and Docker orchestration.',
+    image: 'images/Tpot.jpeg',
+    status: 'Active',
+    onlineText: 'Online',
+    features: fallbackFeatures,
+    stats: fallbackStats
+  });
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:1337/api/homelabs?populate=*')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data && data.data.length > 0) {
+          const item = data.data[0];
+          const attrs = item.attributes || item;
+          let imageUrl = attrs.image;
+          if (attrs.image?.data?.attributes?.url) {
+            imageUrl = `http://localhost:1337${attrs.image.data.attributes.url}`;
+          } else if (attrs.image?.url) {
+            imageUrl = `http://localhost:1337${attrs.image.url}`;
+          }
+
+          setHomelabData({
+            title: attrs.title || homelabData.title,
+            description: attrs.description || homelabData.description,
+            image: imageUrl || homelabData.image,
+            status: attrs.status || homelabData.status,
+            onlineText: attrs.onlineText || homelabData.onlineText,
+            features: attrs.features || fallbackFeatures,
+            stats: attrs.stats || fallbackStats
+          });
+        }
+      })
+      .catch(err => console.log('Homelab fallback used', err));
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -72,14 +116,14 @@ export default function Homelab() {
             {/* Header Bar */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/5">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-sm text-white/80">T-Pot Honeypot</span>
+                <span className="font-mono text-sm text-white/80">{homelabData.title.split('with')[1]?.trim() || 'T-Pot Honeypot'}</span>
                 <span className="px-2 py-0.5 text-xs font-mono text-cyber-green bg-cyber-green/10 rounded">
-                  Active
+                  {homelabData.status}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 bg-cyber-green rounded-full status-pulse" />
-                <span className="font-mono text-xs text-white/40">Online</span>
+                <span className="font-mono text-xs text-white/40">{homelabData.onlineText}</span>
               </div>
             </div>
 
@@ -90,8 +134,8 @@ export default function Homelab() {
               {/* Background Image */}
               <div className="absolute inset-0">
                 <img
-                  src="images/Tpot.jpeg"
-                  alt="T-Pot Dashboard"
+                  src={homelabData.image}
+                  alt={homelabData.title}
                   className={`w-full h-full object-cover transition-all duration-700 ${
                     isExpanded ? 'scale-105 opacity-100' : 'scale-100 opacity-60'
                   }`}
@@ -107,12 +151,10 @@ export default function Homelab() {
                   isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
                 }`}>
                   <h3 className="font-heading text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3">
-                    Live Attack Surface Monitoring
+                    {homelabData.title}
                   </h3>
                   <p className="text-white/60 text-sm max-w-2xl mb-4">
-                    Deployed a containerized T-Pot honeypot environment to monitor real-world cyberattacks, 
-                    utilizing the Elastic Stack for log analysis while mastering network security via 
-                    firewall configuration and Docker orchestration.
+                    {homelabData.description}
                   </p>
                 </div>
 
@@ -120,7 +162,7 @@ export default function Homelab() {
                 <div className={`grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 transition-all duration-500 ${
                   isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}>
-                  {homelabFeatures.map((feature, index) => (
+                  {homelabData.features.map((feature: any, index: number) => (
                     <div
                       key={feature.title}
                       className="p-2.5 sm:p-3 bg-cyber-black/70 backdrop-blur-sm rounded-lg border border-white/10"
@@ -137,7 +179,7 @@ export default function Homelab() {
                   isExpanded ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
                 }`}>
                   <h3 className="font-heading text-base sm:text-xl font-bold text-white mb-1">
-                    Live Attack Surface Monitoring with T-Pot
+                    {homelabData.title}
                   </h3>
                   <p className="text-white/50 text-xs sm:text-sm max-w-xl">
                     Click to explore the honeypot infrastructure...
@@ -159,10 +201,9 @@ export default function Homelab() {
         <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 transition-all duration-1000 delay-300 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
         }`}>
-          <StatBox label="Containers" value="20+" />
-          <StatBox label="Attack Types" value="50+" />
-          <StatBox label="Uptime" value="99.9%" />
-          <StatBox label="Logs/Day" value="10K+" />
+          {homelabData.stats.map((stat: any) => (
+            <StatBox key={stat.label} label={stat.label} value={stat.value} />
+          ))}
         </div>
       </div>
     </section>
@@ -178,3 +219,4 @@ function StatBox({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+

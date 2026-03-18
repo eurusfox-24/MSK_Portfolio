@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, X } from 'lucide-react';
 
-const projects = [
+const fallbackProjects = [
   {
     id: 1,
     title: 'IoT Biometric Pulse & Oxygen Tracker',
@@ -29,9 +29,41 @@ const projects = [
 ];
 
 export default function Projects() {
+  const [projects, setProjects] = useState(fallbackProjects);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<typeof fallbackProjects[0] | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:1337/api/projects?populate=*')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.data && data.data.length > 0) {
+          const cmsProjects = data.data.map((item: any) => {
+            const attrs = item.attributes || item; // Handle Strapi v4 vs v5 response structure
+            let imageUrl = attrs.image;
+            if (attrs.image?.data?.attributes?.url) { // v4
+              imageUrl = `http://localhost:1337${attrs.image.data.attributes.url}`;
+            } else if (attrs.image?.url) { // v5
+              imageUrl = `http://localhost:1337${attrs.image.url}`;
+            }
+            
+            return {
+              id: item.id || attrs.documentId,
+              title: attrs.title,
+              description: attrs.description,
+              image: imageUrl,
+              tags: attrs.tags ? attrs.tags.split(',').map((t: string) => t.trim()) : [],
+              color: attrs.color || 'from-blue-500/20 to-cyan-500/20',
+            };
+          });
+          setProjects(cmsProjects);
+        }
+      })
+      .catch((err) => {
+        console.log('Using fallback projects data (Strapi CMS not reachable)', err);
+      });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,7 +82,7 @@ export default function Projects() {
     cards?.forEach((card) => observer.observe(card));
 
     return () => observer.disconnect();
-  }, []);
+  }, [projects]);
 
   // Lock scroll when modal is open
   useEffect(() => {
@@ -128,7 +160,7 @@ export default function Projects() {
             <div className="p-4 sm:p-6 border-t border-white/10 bg-cyber-dark">
               <h3 className="text-lg sm:text-xl font-bold text-cyber-green mb-2">{selectedProject.title}</h3>
               <div className="flex flex-wrap gap-2 mb-3">
-                {selectedProject.tags.map(tag => (
+                {selectedProject.tags?.map(tag => (
                   <span key={tag} className="px-2 py-0.5 text-[10px] font-mono text-white/40 bg-white/5 rounded border border-white/10">
                     {tag}
                   </span>
